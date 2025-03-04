@@ -6,7 +6,7 @@ from module_admin.service.config_service import ConfigService
 from module_admin.service.dict_service import DictDataService
 from utils.log_util import logger
 
-
+# note: Redis初始化工具类
 class RedisUtil:
     """
     Redis相关方法
@@ -62,6 +62,7 @@ class RedisUtil:
         :param redis: redis对象
         :return:
         """
+        # question: DictDataService.init_cache_sys_dict_services作用？
         async with AsyncSessionLocal() as session:
             await DictDataService.init_cache_sys_dict_services(session, redis)
 
@@ -73,5 +74,6 @@ class RedisUtil:
         :param redis: redis对象
         :return:
         """
+        # question: ConfigService.init_cache_sys_config_services作用？
         async with AsyncSessionLocal() as session:
             await ConfigService.init_cache_sys_config_services(session, redis)

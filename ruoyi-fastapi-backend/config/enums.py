@@ -49,3 +49,17 @@ class RedisInitKeyConfig(Enum):
     ACCOUNT_LOCK = {'key': 'account_lock', 'remark': '用户锁定'}
     PASSWORD_ERROR_COUNT = {'key': 'password_error_count', 'remark': '密码错误次数'}
     SMS_CODE = {'key': 'sms_code', 'remark': '短信验证码'}
+
+
+# # note: Enum中的枚举成员是单例对象
+# # 1. Enum访问单个枚举成员
+# access_token_key = RedisInitKeyConfig.ACCESS_TOKEN.key  # 'access_token'
+# access_token_remark = RedisInitKeyConfig.ACCESS_TOKEN.remark  # '登录令牌信息'
+# print(f"Redis键名: {access_token_key}, 用途: {access_token_remark}")
+
+# # 2. 使用枚举设置/获取 Redis 数据
+# r.set(RedisInitKeyConfig.PASSWORD_ERROR_COUNT.key, 3)
+# error_count = r.get(RedisInitKeyConfig.PASSWORD_ERROR_COUNT.key)
+# # 结合业务逻辑
+# if int(error_count) > 5:
+#     r.set(RedisInitKeyConfig.ACCOUNT_LOCK.key, 'locked')

@@ -45,6 +45,13 @@ class SqlalchemyUtil:
     sqlalchemy工具类
     """
 
+    # note:`self` 和 `cls` 总结对比表
+    # | **维度**       | `self`                            | `cls`                             |
+    # |----------------|-----------------------------------|-----------------------------------|
+    # | **作用对象**    | 实例（对象）                      | 类本身                            |
+    # | **方法类型**    | 实例方法                          | 类方法（需 `@classmethod` 装饰器） |
+    # | **访问范围**    | 实例属性 + 类属性（间接）         | 类属性 + 类方法                   |
+    # | **典型场景**    | 对象状态管理                      | 类级别操作（如工厂方法）           |
     @classmethod
     def base_to_dict(
         cls, obj: Union[Base, Dict], transform_case: Literal['no_case', 'snake_to_camel', 'camel_to_snake'] = 'no_case'

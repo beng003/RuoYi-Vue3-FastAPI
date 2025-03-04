@@ -10,6 +10,14 @@ from utils.common_util import CamelCaseUtil
 class PageResponseModel(BaseModel):
     """
     列表分页查询返回模型
+    
+    PageResponseModel(
+        rows=转换后的数据列表, 
+        pageNum=当前页码,
+        pageSize=每页大小,
+        total=总条数,
+        hasNext=是否存在下一页
+    )
     """
 
     model_config = ConfigDict(alias_generator=to_camel)
@@ -53,6 +61,7 @@ class PageUtil:
     @classmethod
     async def paginate(cls, db: AsyncSession, query: Select, page_num: int, page_size: int, is_page: bool = False):
         """
+        # note: 分页查询
         输入查询语句和分页信息，返回分页数据列表结果
 
         :param db: orm对象

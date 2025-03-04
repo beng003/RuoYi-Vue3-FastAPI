@@ -119,8 +119,8 @@ async def register_user(request: Request, user_register: UserRegister, query_db:
 #     except Exception as e:
 #         logger.exception(e)
 #         return ResponseUtil.error(msg=str(e))
-#
-#
+
+
 # @loginController.post("/forgetPwd", response_model=CrudResponseModel)
 # async def forget_user_pwd(request: Request, forget_user: ResetUserModel, query_db: AsyncSession = Depends(get_db)):
 #     try:

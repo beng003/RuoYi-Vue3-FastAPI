@@ -157,56 +157,55 @@ class MenuConstant:
 
 class GenConstant:
     """
-    代码生成常量
-
-    TPL_CRUD: 单表（增删改查
-    TPL_TREE: 树表（增删改查）
-    TPL_SUB: 主子表（增删改查）
-    TREE_CODE: 树编码字段
-    TREE_PARENT_CODE: 树父编码字段
-    TREE_NAME: 树名称字段
-    PARENT_MENU_ID: 上级菜单ID字段
-    PARENT_MENU_NAME: 上级菜单名称字段
-    COLUMNTYPE_STR: 数据库字符串类型
-    COLUMNTYPE_TEXT: 数据库文本类型
-    COLUMNTYPE_TIME: 数据库时间类型
-    COLUMNTYPE_GEOMETRY: 数据库字空间类型
-    COLUMNTYPE_NUMBER: 数据库数字类型
-    COLUMNNAME_NOT_EDIT: 页面不需要编辑字段
-    COLUMNNAME_NOT_LIST: 页面不需要显示的列表字段
-    COLUMNNAME_NOT_QUERY: 页面不需要查询字段
-    BASE_ENTITY: Entity基类字段
-    TREE_ENTITY: Tree基类字段
-    HTML_INPUT: 文本框
-    HTML_TEXTAREA: 文本域
-    HTML_SELECT: 下拉框
-    HTML_RADIO: 单选框
-    HTML_CHECKBOX: 复选框
-    HTML_DATETIME: 日期控件
-    HTML_IMAGE_UPLOAD: 图片上传控件
-    HTML_FILE_UPLOAD: 文件上传控件
-    HTML_EDITOR: 富文本控件
-    TYPE_DECIMAL: 高精度计算类型
-    TYPE_DATE: 时间类型
-    QUERY_LIKE: 模糊查询
-    QUERY_EQ: 相等查询
-    REQUIRE: 需要
-    DB_TO_SQLALCHEMY_TYPE_MAPPING: 数据库类型与sqlalchemy类型映射
-    DB_TO_PYTHON_TYPE_MAPPING: 数据库类型与python类型映射
+    代码生成器核心配置常量
+    
+    主要包含四大类配置：
+    
+    1. 模板配置 - 定义代码生成器支持的模板类型
+       TPL_CRUD: 基础CRUD模板（单表操作）
+       TPL_TREE: 树形结构模板（包含父子关系）
+       TPL_SUB:  主子表模板（一对多关系）
+    
+    2. 数据库适配 - 根据 DataBaseConfig.db_type 动态适配不同数据库类型
+       COLUMNTYPE_STR:    字符串类型字段集合（适配 PostgreSQL/MySQL 等）
+       COLUMNTYPE_TEXT:   大文本类型字段集合
+       COLUMNTYPE_TIME:   时间类型字段集合（包含带时区类型）
+       COLUMNTYPE_GEOMETRY: 空间数据类型集合（点线面等几何图形）
+       COLUMNTYPE_NUMBER: 数字类型字段集合（整型/浮点型等）
+    
+    3. 字段控制 - 定义代码生成时需要特殊处理的字段
+       COLUMNNAME_NOT_EDIT:  禁止在前端编辑的字段（如ID/创建时间等）
+       COLUMNNAME_NOT_LIST:  不在列表页显示的字段
+       COLUMNNAME_NOT_QUERY: 不参与查询的字段
+       BASE_ENTITY: 基础实体类包含字段（createBy/createTime等）
+       TREE_ENTITY: 树形实体类特殊字段（parentId/children等）
+    
+    4. 类型映射系统 - 数据库类型到编程语言的类型转换
+       DB_TO_SQLALCHEMY_TYPE_MAPPING: 数据库类型 → SQLAlchemy 类型映射
+       DB_TO_PYTHON_TYPE_MAPPING:     数据库类型 → Python 原生类型映射
+    
+    5. 前端组件配置 - 定义生成的表单控件类型
+       HTML_INPUT:      文本框
+       HTML_DATETIME:   日期时间选择器
+       HTML_IMAGE_UPLOAD: 图片上传组件
+       ...其他控件类型...
     """
 
-    TPL_CRUD = 'crud'
-    TPL_TREE = 'tree'
-    TPL_SUB = 'sub'
-    TREE_CODE = 'treeCode'
-    TREE_PARENT_CODE = 'treeParentCode'
-    TREE_NAME = 'treeName'
-    PARENT_MENU_ID = 'parentMenuId'
-    PARENT_MENU_NAME = 'parentMenuName'
+    # 模板类型标识（值对应模板目录名称）
+    TPL_CRUD = 'crud'  # 基础增删改查模板
+    TPL_TREE = 'tree'  # 树形结构模板 
+    TPL_SUB = 'sub'    # 主子表模板
+
+    # 树形结构字段配置（用于树表模板）
+    TREE_CODE = 'treeCode'         # 树节点编码字段名
+    TREE_PARENT_CODE = 'treeParentCode'  # 树父节点编码字段名
+    TREE_NAME = 'treeName'         # 树显示名称字段名
+
+    # 动态数据库类型配置（根据 db_type 切换类型集合）
     COLUMNTYPE_STR = (
-        ['character varying', 'varchar', 'character', 'char']
+        ['character varying', 'varchar', 'character', 'char']  # PostgreSQL字符串类型
         if DataBaseConfig.db_type == 'postgresql'
-        else ['char', 'varchar', 'nvarchar', 'varchar2']
+        else ['char', 'varchar', 'nvarchar', 'varchar2']      # 其他数据库字符串类型
     )
     COLUMNTYPE_TEXT = (
         ['text', 'citext'] if DataBaseConfig.db_type == 'postgresql' else ['tinytext', 'text', 'mediumtext', 'longtext']

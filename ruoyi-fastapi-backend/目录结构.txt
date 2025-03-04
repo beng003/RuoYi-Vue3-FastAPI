@@ -1,0 +1,60 @@
+.
+├── assets
+│   └── font
+├── config
+│   └── __pycache__
+├── exceptions
+│   └── __pycache__
+├── logs
+├── middlewares
+│   ├── __pycache__
+│   └── trace_middleware
+│       └── __pycache__
+├── module_admin
+│   ├── annotation
+│   │   └── __pycache__
+│   ├── aspect
+│   │   └── __pycache__
+│   ├── controller
+│   │   └── __pycache__
+│   ├── dao
+│   │   └── __pycache__
+│   ├── entity
+│   │   ├── do
+│   │   │   └── __pycache__
+│   │   └── vo
+│   │       └── __pycache__
+│   └── service
+│       └── __pycache__
+├── module_generator
+│   ├── controller
+│   │   └── __pycache__
+│   ├── dao
+│   │   └── __pycache__
+│   ├── entity
+│   │   ├── do
+│   │   │   └── __pycache__
+│   │   └── vo
+│   │       └── __pycache__
+│   ├── service
+│   │   └── __pycache__
+│   └── templates
+│       ├── js
+│       ├── python
+│       ├── sql
+│       └── vue
+│           └── v3
+├── module_task
+│   └── __pycache__
+├── __pycache__
+├── sql
+├── sub_applications
+│   └── __pycache__
+├── utils
+│   └── __pycache__
+└── vf_admin
+    ├── download_path
+    ├── gen_path
+    └── upload_path
+
+57 directories

@@ -8,6 +8,8 @@ async def get_db():
 
     :return:
     """
+    
+    # note: yield 会保留函数局部变量和执行位置，而 return 完全退出函数上下文。
     async with AsyncSessionLocal() as current_db:
         yield current_db
 

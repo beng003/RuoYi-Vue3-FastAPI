@@ -29,27 +29,32 @@ from utils.log_util import logger
 
 
 # 生命周期事件
+# note: contextlib生命周期管理（启动前准备 → 运行 → 关闭清理）
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # 启动阶段
     logger.info(f'{AppConfig.app_name}开始启动')
-    worship()
-    await init_create_table()
-    app.state.redis = await RedisUtil.create_redis_pool()
-    await RedisUtil.init_sys_dict(app.state.redis)
-    await RedisUtil.init_sys_config(app.state.redis)
-    await SchedulerUtil.init_system_scheduler()
+    worship()  # 打印启动艺术字
+    await init_create_table()  # 初始化数据库表结构
+    app.state.redis = await RedisUtil.create_redis_pool()  # 创建Redis连接池
+    await RedisUtil.init_sys_dict(app.state.redis)  # 加载字典到Redis缓存
+    await RedisUtil.init_sys_config(app.state.redis)  # 加载系统参数到Redis缓存
+    await SchedulerUtil.init_system_scheduler()  # 启动定时任务
     logger.info(f'{AppConfig.app_name}启动成功')
-    yield
-    await RedisUtil.close_redis_pool(app)
-    await SchedulerUtil.close_system_scheduler()
+    
+    # 运行阶段
+    yield  
+    
+    # 关闭阶段
+    await RedisUtil.close_redis_pool(app)  # 关闭Redis连接池
+    await SchedulerUtil.close_system_scheduler()  # 关闭定时任务
 
-
-# 初始化FastAPI对象
+# FastAPI核心对象初始化
 app = FastAPI(
-    title=AppConfig.app_name,
-    description=f'{AppConfig.app_name}接口文档',
-    version=AppConfig.app_version,
-    lifespan=lifespan,
+    title=AppConfig.app_name,  # 从配置读取应用名称
+    description=f'{AppConfig.app_name}接口文档',  # 自动生成API文档描述
+    version=AppConfig.app_version,  # 从配置读取版本号
+    lifespan=lifespan,  # 挂载生命周期处理器
 )
 
 # 挂载子应用

@@ -69,25 +69,40 @@ class PostDao:
     @classmethod
     async def get_post_list(cls, db: AsyncSession, query_object: PostPageQueryModel, is_page: bool = False):
         """
-        根据查询参数获取岗位列表信息
-
-        :param db: orm对象
-        :param query_object: 查询参数对象
-        :param is_page: 是否开启分页
-        :return: 岗位列表信息对象
+        根据查询参数获取岗位列表信息（支持分页）
+        
+        :param db: 异步数据库会话
+        :param query_object: 包含分页参数和过滤条件的查询对象
+        :param is_page: 是否启用分页（True返回分页结果，False返回全部数据）
+        :return: 岗位列表（分页或完整列表）
         """
+        
+        # note: SQL构建基础查询语句
         query = (
-            select(SysPost)
-            .where(
+            select(SysPost)  # 选择岗位表所有字段
+            .where(  # 动态过滤条件
+                # question: 为什么使用模糊匹配而不是精确匹配？
+                # answer: 模糊匹配可以提高查询效率，精确匹配可能会导致查询结果不精确
+                # 岗位编码模糊查询（如果query_object有post_code参数）
                 SysPost.post_code.like(f'%{query_object.post_code}%') if query_object.post_code else True,
+                # 岗位名称模糊查询（如果query_object有post_name参数）
                 SysPost.post_name.like(f'%{query_object.post_name}%') if query_object.post_name else True,
+                # 状态精确匹配（如果query_object有status参数）
                 SysPost.status == query_object.status if query_object.status else True,
             )
-            .order_by(SysPost.post_sort)
-            .distinct()
+            .order_by(SysPost.post_sort)  # 按排序字段升序排列
+            .distinct()  # 去重查询结果
         )
-        post_list = await PageUtil.paginate(db, query, query_object.page_num, query_object.page_size, is_page)
-
+        
+        # 执行分页/全量查询
+        post_list = await PageUtil.paginate(
+            db,                # 数据库会话
+            query,             # 构建好的查询语句
+            query_object.page_num,    # 当前页码
+            query_object.page_size,   # 每页条数
+            is_page            # 是否分页标志
+        )
+        
         return post_list
 
     @classmethod

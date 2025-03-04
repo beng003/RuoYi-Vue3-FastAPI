@@ -25,7 +25,9 @@ postController = APIRouter(prefix='/system/post', dependencies=[Depends(LoginSer
 async def get_system_post_list(
     request: Request,
     post_page_query: PostPageQueryModel = Depends(PostPageQueryModel.as_query),
-    query_db: AsyncSession = Depends(get_db),
+    # note: Depends()函数的作用是依赖注入
+    # 当请求到达接口时，FastAPI自动调用get_db()函数获取数据库会话对象
+    query_db: AsyncSession = Depends(get_db), 
 ):
     # 获取分页数据
     post_page_query_result = await PostService.get_post_list_services(query_db, post_page_query, is_page=True)
